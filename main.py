@@ -47,6 +47,18 @@ class Posts:
                 })
             json.dump(s, file, ensure_ascii=False)
 
+    def delete(self, post):
+        self.posts.remove(post)
+        s = []
+        with open(self.path, "w", encoding="utf-8") as file:
+            for post in self.posts:
+                s.append({
+                    "author": post.author,
+                    "content": post.content,
+                    "date": post.date
+                })
+            json.dump(s, file, ensure_ascii=False)
+
     def search_by_author(self, author_name):
         posts = []
         for post in self.posts:
@@ -76,7 +88,8 @@ def main():
                             "2. Показать посты\n"
                             "3. Поиск по автору\n"
                             "4. Поиск по контенту\n"
-                            "5. Поиск по дате\n"))
+                            "5. Поиск по дате\n"
+                            "6. Удалить пост по номеру\n"))
     if user_answer == 0:
         exit()
     elif user_answer == 1:
@@ -85,21 +98,39 @@ def main():
             input("Текст публикации:\n"),
             input("Дата DD.MM.YYYY(пропустите, чтобы установить текущую): ")
         ))
+        exit()
     elif user_answer == 2:
+        posts2 = posts.posts
         for post in posts.posts:
+            i = posts2.index(post)
+            print(f"{i + 1}.")
             print(post)
     elif user_answer == 3:
         user_input = input("Введите имя автора\n")
-        for post in posts.search_by_author(user_input):
+        posts2 = posts.search_by_author(user_input)
+        for post in posts2:
+            i = posts2.index(post)
+            print(f"{i + 1}.")
             print(post)
     elif user_answer == 4:
         user_input = input("Введите ключевое слов\n")
-        for post in posts.search_by_content(user_input):
+        posts2 = posts.search_by_content(user_input)
+        for post in posts2:
+            i = posts2.index(post)
+            print(f"{i + 1}.")
             print(post)
     elif user_answer == 5:
         user_input = input("Введите дату в формате: DD.MM.YYYY\n")
-        for post in posts.search_by_date(user_input):
+        posts2 = posts.search_by_date(user_input)
+        for post in posts2:
+            i = posts2.index(post)
+            print(f"{i + 1}.")
             print(post)
+    user_input = int(input("Введите индекс для удаления\n"
+                           "0. Выход"))
+    if user_input == 0:
+        exit()
+    posts.delete(posts2[user_input - 1])
 
 
 if __name__ == "__main__":
