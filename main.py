@@ -47,22 +47,58 @@ class Posts:
                 })
             json.dump(s, file, ensure_ascii=False)
 
+    def search_by_author(self, author_name):
+        posts = []
+        for post in self.posts:
+            if post.search_by_author(author_name):
+                posts.append(post)
+        return posts
+
+    def search_by_content(self, content):
+        posts = []
+        for post in self.posts:
+            if post.search_by_content(content):
+                posts.append(post)
+        return posts
+
+    def search_by_date(self, date):
+        posts = []
+        for post in self.posts:
+            if post.search_by_date(date):
+                posts.append(post)
+        return posts
+
 
 def main():
     posts = Posts("posts.json")
     user_answer = int(input("0. Выход\n"
                             "1. Добавить пост\n"
-                            "2. Показать посты\n"))
+                            "2. Показать посты\n"
+                            "3. Поиск по автору\n"
+                            "4. Поиск по контенту\n"
+                            "5. Поиск по дате\n"))
     if user_answer == 0:
         exit()
     elif user_answer == 1:
         posts.append(Post(
             input("Ваше имя: "),
             input("Текст публикации:\n"),
-            input("Дата (пропустите, чтобы установить текущую): ")
+            input("Дата DD.MM.YYYY(пропустите, чтобы установить текущую): ")
         ))
     elif user_answer == 2:
         for post in posts.posts:
+            print(post)
+    elif user_answer == 3:
+        user_input = input("Введите имя автора\n")
+        for post in posts.search_by_author(user_input):
+            print(post)
+    elif user_answer == 4:
+        user_input = input("Введите ключевое слов\n")
+        for post in posts.search_by_content(user_input):
+            print(post)
+    elif user_answer == 5:
+        user_input = input("Введите дату в формате: DD.MM.YYYY\n")
+        for post in posts.search_by_date(user_input):
             print(post)
 
 
